@@ -1,9 +1,9 @@
 on:
   push:
     tags: ['v[0-9].[0-9]+.[0-9]+']
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   one:
@@ -14,14 +14,17 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Dump job context
+        if: startsWith(github.ref, 'refs/tags/v') && github.event.base_ref=='refs/heads/main'
         env:
           JOB_CONTEXT: ${{ toJSON(job) }}
         run: echo "$JOB_CONTEXT"
       - name: Dump steps context
+        if: startsWith(github.ref, 'refs/tags/v') && github.event.base_ref=='refs/heads/main'
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         run: echo "$STEPS_CONTEXT"
       - name: Dump runner context
+        if: startsWith(github.ref, 'refs/tags/v') && github.event.base_ref=='refs/heads/main'
         env:
           RUNNER_CONTEXT: ${{ toJSON(runner) }}
         run: echo "$RUNNER_CONTEXT"
